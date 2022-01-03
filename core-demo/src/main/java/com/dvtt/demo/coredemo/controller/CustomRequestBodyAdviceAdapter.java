@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
@@ -29,10 +30,11 @@ public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
     }
 
     @Override
+    // for post method
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage,
                                 MethodParameter parameter, Type targetType,
                                 Class<? extends HttpMessageConverter<?>> converterType) {
-//        loggingService.logRequest(httpServletRequest, body);
+        loggingService.logRequest(httpServletRequest, body);
 
         return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
     }

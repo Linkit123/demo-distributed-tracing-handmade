@@ -4,9 +4,9 @@ import com.dvtt.demo.distributedtracinghandmade.namegenerator.entity.Animal;
 import com.dvtt.demo.distributedtracinghandmade.namegenerator.entity.Scientist;
 
 /**
- * Created by linhtn on 1/2/2022.
+ * Created by linhtn on 1/3/2022.
  */
-public interface NamingService {
-    String naming();
-
+public interface PartnerService {
+    Scientist createScientist(Scientist scientist);
+    Animal createAnimal(Animal animal);
 }

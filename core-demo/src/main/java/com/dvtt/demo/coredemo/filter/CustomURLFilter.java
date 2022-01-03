@@ -35,6 +35,7 @@ public class CustomURLFilter extends OncePerRequestFilter {
     }
 
     @Override
+    // for get method
     public void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response,
                                  @NotNull FilterChain filterChain) throws IOException, ServletException {
 

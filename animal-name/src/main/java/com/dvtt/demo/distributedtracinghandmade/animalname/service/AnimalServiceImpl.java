@@ -1,5 +1,8 @@
 package com.dvtt.demo.distributedtracinghandmade.animalname.service;
 
+import com.dvtt.demo.distributedtracinghandmade.animalname.entity.Animal;
+import com.dvtt.demo.utils.HttpUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -10,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -24,16 +26,16 @@ public class AnimalServiceImpl implements AnimalService {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private static final String API_URL = "https://61d2c38bb4c10c001712b58a.mockapi.io/api/v1/animals";
 
     @Override
     public String getName() {
         var random = new Random();
-        var url = "https://61d2c38bb4c10c001712b58a.mockapi.io/api/v1/animals";
-        var s = httpGet(url);
+        var s = HttpUtil.httpGet(API_URL, restTemplate);
         try {
-            var listAnimals = objectMapper.readValue(s, new TypeReference<List<HashMap<String, String>>>() {
+            var animals = objectMapper.readValue(s, new TypeReference<List<Animal>>() {
             });
-            var animalNames = listAnimals.stream().map(x -> x.get("name")).collect(Collectors.toList());
+            var animalNames = animals.stream().map(Animal::getName).collect(Collectors.toList());
             return animalNames.get(random.nextInt(animalNames.size()));
         } catch (Exception ex) {
             return "";
@@ -41,13 +43,14 @@ public class AnimalServiceImpl implements AnimalService {
 
     }
 
-    private String httpGet(String url) {
-        var uri = UriComponentsBuilder.fromHttpUrl(url)
-                .build().toString();
-        var headers = new HttpHeaders();
-        headers.set(HttpHeaders.ACCEPT_LANGUAGE, "vi-VN");
-        var exchange = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), String.class);
-        return exchange.getBody();
+    @Override
+    public Animal create(Animal animal) {
+        String result = HttpUtil.httpPost(API_URL, animal, restTemplate);
+        try {
+            return objectMapper.readValue(result, Animal.class);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 
 }

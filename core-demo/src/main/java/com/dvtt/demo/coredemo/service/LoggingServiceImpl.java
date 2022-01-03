@@ -27,7 +27,7 @@ public class LoggingServiceImpl implements LoggingService {
     @Override
     public void logRequest(HttpServletRequest httpServletRequest, Object body) {
         Map<String, String> parameters = buildParametersMap(httpServletRequest);
-        log.info("---------- BEGIN {} ----------", httpServletRequest.getAttribute(REQUEST_ID));
+        log.info("---------- BEGIN request {} ----------", httpServletRequest.getAttribute(REQUEST_ID));
         log.info("method=[{}]", httpServletRequest.getMethod());
         log.info("path=[{}]", httpServletRequest.getRequestURI());
 
@@ -38,18 +38,20 @@ public class LoggingServiceImpl implements LoggingService {
         if (!ObjectUtils.isEmpty(body)) {
             log.info("body=[{}]", gson.toJson(body));
         }
+        log.info("---------- END request {} ----------", httpServletRequest.getAttribute(REQUEST_ID));
         log.info("----------> processing...");
     }
 
     @Override
     public void logResponse(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object body) {
+        log.info("---------- BEGIN response {} ----------", httpServletRequest.getAttribute(REQUEST_ID));
         log.info("method=[{}]", httpServletRequest.getMethod());
         log.info("path=[{}]", httpServletRequest.getRequestURI());
         log.info("response_code=[{}]", httpServletResponse.getStatus());
         if (!ObjectUtils.isEmpty(body)) {
             log.info("response_body=[{}]", gson.toJson(body));
         }
-        log.info("---------- END {} ----------", httpServletRequest.getAttribute(REQUEST_ID));
+        log.info("---------- END response {} ----------", httpServletRequest.getAttribute(REQUEST_ID));
     }
 
     private Map<String, String> buildParametersMap(HttpServletRequest httpServletRequest) {

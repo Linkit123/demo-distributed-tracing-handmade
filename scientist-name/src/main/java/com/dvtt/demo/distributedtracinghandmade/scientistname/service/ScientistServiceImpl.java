@@ -1,5 +1,8 @@
 package com.dvtt.demo.distributedtracinghandmade.scientistname.service;
 
+import com.dvtt.demo.distributedtracinghandmade.scientistname.entity.Scientist;
+import com.dvtt.demo.utils.HttpUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -24,29 +27,32 @@ public class ScientistServiceImpl implements ScientistService {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private static final String API_URL = "https://61d2c38bb4c10c001712b58a.mockapi.io/api/v1/scientists";
 
     @Override
     public String getName() {
         var random = new Random();
-        var url = "https://61d2c38bb4c10c001712b58a.mockapi.io/api/v1/scientists";
-        var s = httpGet(url);
+        var s = HttpUtil.httpGet(API_URL, restTemplate);
         try {
-            var listScientist = objectMapper.readValue(s, new TypeReference<List<HashMap<String, String>>>() {
+            var scientists = objectMapper.readValue(s, new TypeReference<List<Scientist>>() {
             });
-            var scientistNames = listScientist.stream().map(x -> x.get("name")).collect(Collectors.toList());
-            return scientistNames.get(random.nextInt(scientistNames.size()));
+            var stringNames = scientists.stream().map(Scientist::getName).collect(Collectors.toList());
+            return stringNames.get(random.nextInt(scientists.size()));
         } catch (Exception ex) {
             return "";
         }
 
     }
 
-    private String httpGet(String url) {
-        var uri = UriComponentsBuilder.fromHttpUrl(url)
-                .build().toString();
-        var headers = new HttpHeaders();
-        headers.set(HttpHeaders.ACCEPT_LANGUAGE, "vi-VN");
-        var exchange = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), String.class);
-        return exchange.getBody();
+    @Override
+    public Scientist create(Scientist animal) {
+        String result = HttpUtil.httpPost(API_URL, animal, restTemplate);
+        try {
+            return objectMapper.readValue(result, Scientist.class);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
+
+
 }

@@ -1,10 +1,9 @@
 package com.dvtt.demo.distributedtracinghandmade.animalname.controller;
 
+import com.dvtt.demo.distributedtracinghandmade.animalname.entity.Animal;
 import com.dvtt.demo.distributedtracinghandmade.animalname.service.AnimalService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by linhtn on 1/2/2022.
@@ -18,5 +17,10 @@ public class AnimalController {
     @GetMapping("/random")
     public String getName() {
         return service.getName();
+    }
+
+    @PostMapping()
+    public Animal create(@RequestBody Animal animal) {
+        return service.create(animal);
     }
 }
