@@ -23,7 +23,7 @@ public class NamingServiceImpl implements NamingService {
 
         String scientistName = this.httpGet(scientistUrl);
         String animalName = this.httpGet(animalUrl);
-        return String.format("%s-%s", scientistName, animalName);
+        return String.format("%s %s %s", scientistName, "loves", animalName);
     }
 
     private String httpGet(String url) {
