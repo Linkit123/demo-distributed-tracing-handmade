@@ -15,15 +15,16 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class LoggingService {
+public class LoggingServiceImpl implements LoggingService {
 
     public static final String REQUEST_ID = "request_id";
     public final Gson gson;
 
-    public LoggingService() {
+    public LoggingServiceImpl() {
         gson = new Gson();
     }
 
+    @Override
     public void logRequest(HttpServletRequest httpServletRequest, Object body) {
         Map<String, String> parameters = buildParametersMap(httpServletRequest);
         log.info("---------- BEGIN {} ----------", httpServletRequest.getAttribute(REQUEST_ID));
@@ -40,6 +41,7 @@ public class LoggingService {
         log.info("----------> processing...");
     }
 
+    @Override
     public void logResponse(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object body) {
         log.info("method=[{}]", httpServletRequest.getMethod());
         log.info("path=[{}]", httpServletRequest.getRequestURI());

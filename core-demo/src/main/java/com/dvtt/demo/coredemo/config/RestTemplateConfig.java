@@ -1,4 +1,4 @@
-package com.dvtt.demo.distributedtracinghandmade.namegenerator.config;
+package com.dvtt.demo.coredemo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
