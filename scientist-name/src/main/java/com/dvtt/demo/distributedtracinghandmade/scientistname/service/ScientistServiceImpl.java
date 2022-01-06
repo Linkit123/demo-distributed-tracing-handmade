@@ -1,19 +1,14 @@
 package com.dvtt.demo.distributedtracinghandmade.scientistname.service;
 
 import com.dvtt.demo.distributedtracinghandmade.scientistname.entity.Scientist;
-import com.dvtt.demo.utils.HttpUtil;
+import com.dvtt.demo.utils.HttpUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -32,7 +27,7 @@ public class ScientistServiceImpl implements ScientistService {
     @Override
     public String getName() {
         var random = new Random();
-        var s = HttpUtil.httpGet(API_URL, restTemplate);
+        var s = HttpUtils.httpGet(API_URL, restTemplate);
         try {
             var scientists = objectMapper.readValue(s, new TypeReference<List<Scientist>>() {
             });
@@ -46,7 +41,7 @@ public class ScientistServiceImpl implements ScientistService {
 
     @Override
     public Scientist create(Scientist animal) {
-        String result = HttpUtil.httpPost(API_URL, animal, restTemplate);
+        String result = HttpUtils.httpPost(API_URL, animal, restTemplate);
         try {
             return objectMapper.readValue(result, Scientist.class);
         } catch (JsonProcessingException e) {

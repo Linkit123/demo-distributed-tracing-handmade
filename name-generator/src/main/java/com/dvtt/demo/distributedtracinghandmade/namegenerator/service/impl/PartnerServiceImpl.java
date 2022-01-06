@@ -25,7 +25,7 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     public Scientist createScientist(Scientist scientist) {
         try {
-            String result = HttpUtils.httpPost(ANIMAL_URL, scientist, restTemplate);
+            String result = HttpUtils.httpPost(SCIENTIST_URL, scientist, restTemplate);
             return objectMapper.readValue(result, Scientist.class);
         } catch (JsonProcessingException e) {
             return null;
@@ -35,7 +35,7 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     public Animal createAnimal(Animal animal) {
         try {
-            String result = HttpUtils.httpPost(SCIENTIST_URL, animal, restTemplate);
+            String result = HttpUtils.httpPost(ANIMAL_URL, animal, restTemplate);
             return objectMapper.readValue(result, Animal.class);
         } catch (JsonProcessingException e) {
             return null;

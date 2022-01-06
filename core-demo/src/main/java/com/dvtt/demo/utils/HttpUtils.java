@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * Created by linhtn on 1/3/2022.
  */
 @Component
-public class HttpUtil {
+public class HttpUtils {
 
     public static String httpPost(String url, Object body, RestTemplate restTemplate) {
         var uri = UriComponentsBuilder.fromHttpUrl(url)
