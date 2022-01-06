@@ -3,7 +3,7 @@ package com.dvtt.demo.distributedtracinghandmade.namegenerator.service.impl;
 import com.dvtt.demo.distributedtracinghandmade.namegenerator.entity.Animal;
 import com.dvtt.demo.distributedtracinghandmade.namegenerator.entity.Scientist;
 import com.dvtt.demo.distributedtracinghandmade.namegenerator.service.PartnerService;
-import com.dvtt.demo.utils.HttpUtil;
+import com.dvtt.demo.utils.HttpUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     public Scientist createScientist(Scientist scientist) {
         try {
-            String result = HttpUtil.httpPost(ANIMAL_URL, scientist, restTemplate);
+            String result = HttpUtils.httpPost(ANIMAL_URL, scientist, restTemplate);
             return objectMapper.readValue(result, Scientist.class);
         } catch (JsonProcessingException e) {
             return null;
@@ -35,7 +35,7 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     public Animal createAnimal(Animal animal) {
         try {
-            String result = HttpUtil.httpPost(SCIENTIST_URL, animal, restTemplate);
+            String result = HttpUtils.httpPost(SCIENTIST_URL, animal, restTemplate);
             return objectMapper.readValue(result, Animal.class);
         } catch (JsonProcessingException e) {
             return null;
