@@ -1,6 +1,5 @@
 package com.dvtt.demo.coredemo.interceptor;
 
-import com.dvtt.demo.coredemo.thread.ThreadContextKeeper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
@@ -25,25 +24,22 @@ public class RequestResponseLoggingInterceptor implements ClientHttpRequestInter
         return response;
     }
 
-    private void logRequest(HttpRequest request, byte[] body) {
-        String requestId = ThreadContextKeeper.getRequestAttributes().getRequestId();
-        request.getHeaders().add("request_id", requestId);
-        log.info("===========================request begin {}================================================", requestId);
+    private void logRequest(HttpRequest request, byte[] body) throws IOException {
+        log.info("===========================request begin================================================");
         log.info("URI         : {}", request.getURI());
         log.info("Method      : {}", request.getMethod());
         log.info("Headers     : {}", request.getHeaders());
         log.info("Request body: {}", new String(body, StandardCharsets.UTF_8));
-        log.info("==========================request end {}================================================", requestId);
+        log.info("==========================request end================================================");
     }
 
     private void logResponse(ClientHttpResponse response) throws IOException {
-        String requestId = ThreadContextKeeper.getRequestAttributes().getRequestId();
-        log.info("============================response begin {}==========================================", requestId);
+        log.info("============================response begin==========================================");
         log.info("Status code  : {}", response.getStatusCode());
         log.info("Status text  : {}", response.getStatusText());
         log.info("Headers      : {}", response.getHeaders());
         log.info("Response body: {}", StreamUtils.copyToString(response.getBody(), Charset.defaultCharset()));
-        log.info("==========================request end {}================================================", requestId);
+        log.info("=======================response end=================================================");
     }
 
 }
