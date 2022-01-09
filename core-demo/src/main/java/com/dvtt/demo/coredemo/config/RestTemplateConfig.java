@@ -1,6 +1,6 @@
 package com.dvtt.demo.coredemo.config;
 
-import com.dvtt.demo.coredemo.interceptor.RequestResponseLoggingInterceptor;
+import com.dvtt.demo.coredemo.interceptor.RestTemplateInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate() {
         var restTemplate = new RestTemplate();
         var factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
-        restTemplate.setInterceptors(Collections.singletonList(new RequestResponseLoggingInterceptor()));
+        restTemplate.setInterceptors(Collections.singletonList(new RestTemplateInterceptor()));
         restTemplate.setRequestFactory(factory);
         return restTemplate;
     }
