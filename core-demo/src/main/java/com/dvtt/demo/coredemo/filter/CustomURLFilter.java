@@ -1,7 +1,9 @@
 package com.dvtt.demo.coredemo.filter;
 
 import com.dvtt.demo.coredemo.service.LoggingServiceImpl;
+import com.dvtt.demo.coredemo.thread.ThreadContextKeeper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -36,11 +38,17 @@ public class CustomURLFilter extends OncePerRequestFilter {
 
     @Override
     // for get method
-    public void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response,
-                                 @NotNull FilterChain filterChain) throws IOException, ServletException {
+    public void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
+                                 final FilterChain filterChain) throws IOException, ServletException {
 
-        String requestId = UUID.randomUUID().toString();
+        String requestId;
+        if (!ObjectUtils.isEmpty(request.getHeader("request_id"))) {
+            requestId = request.getHeader("request_id");
+        } else {
+            requestId = UUID.randomUUID().toString();
+        }
         request.setAttribute(LoggingServiceImpl.REQUEST_ID, requestId);
+        ThreadContextKeeper.getRequestAttributes().setRequestId(requestId);
         if (DispatcherType.REQUEST.name().equals(request.getDispatcherType().name())
                 && request.getMethod().equals(HttpMethod.GET.name())
                 || DispatcherType.REQUEST.name().equals(request.getDispatcherType().name())
